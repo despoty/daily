@@ -1,0 +1,34 @@
+name: Build and Push Docker Image
+
+# 在推送到 main 分支时触发工作流
+on:
+  push:
+    branches:
+      - main
+
+# 定义工作流的作业
+jobs:
+  build:
+    runs-on: ubuntu-latest  # 运行在 Ubuntu 上
+
+    steps:
+    # 检出仓库代码
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # 登录 GitHub 容器注册表
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v2
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    # 构建 Docker 镜像
+    - name: Build Docker image
+      run: |
+        docker build -t ghcr.io/${{ github.repository }}/daily-image:${{ github.sha }} .
+
+    # 推送 Docker 镜像到 GitHub 容器注册表
+    - name: Push Docker image
+      run: |
+        docker push ghcr.io/${{ github.repository }}/daily-image:${{ github.sha }}
