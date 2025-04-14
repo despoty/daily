@@ -62,7 +62,7 @@ def process_image(image_url, date):
 
     # 保存或返回图像
     now = date
-    directory = f"./image/{now.strftime('%Y')}/{now.strftime('%m')}/{now.strftime('%d')}"
+    directory = f"/image/{now.strftime('%Y')}/{now.strftime('%m')}/{now.strftime('%d')}"
     os.makedirs(directory, exist_ok=True)
     output_image_path = f"{directory}/daily-{now.strftime('%Y%m%d')}.png"
     img.save(output_image_path)
